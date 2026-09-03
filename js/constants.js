@@ -55,3 +55,6 @@ export const PANELS = [
 ];
 
 export const STORAGE_KEY = 'orgsys_cronograma_2026_v2';
+
+export const SUPABASE_URL = 'https://ylgoipprypzzivricmer.supabase.co';
+export const SUPABASE_ANON_KEY = 'sb_publishable_CFaAD0QkqBHw9UUinfBGGg_MrbYEyYG';

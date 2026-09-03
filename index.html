@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ORG.SYS — Cronograma</title>
-<link rel="stylesheet" href="css/style.css?v=2">
+<link rel="stylesheet" href="css/style.css?v=3">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 <div class="app">
@@ -19,6 +20,7 @@
     <div class="statusline" id="statusline">cargando<span class="cursor"></span></div>
     <nav class="nav" id="nav"></nav>
     <div class="sidebar-footer">
+      <div class="auth-section" id="authSection"></div>
       <button class="btn-export" id="exportBtn">⭳ Descargar copia actualizada</button>
       <div class="save-status" id="saveStatus">Autoguardado activo</div>
     </div>

@@ -1,11 +1,13 @@
 import { PANELS } from './constants.js';
 
 import {
-    setState
+    setState,
+    defaultState
 } from './state.js';
 
 import {
-    loadState
+    loadState,
+    syncStateWithCloud
 } from './persistence.js';
 
 import {
@@ -24,6 +26,16 @@ import {
 import {
     exportCopy
 } from './export.js';
+
+import {
+    renderAuthSection,
+    openAuthModal,
+    setOnAuthChanged
+} from './authModal.js';
+
+import {
+    getCurrentUser
+} from './supabase.js';
 
 
 function buildPanelShells() {
@@ -91,9 +103,9 @@ function updateTopbarDate() {
 }
 
 
-function init() {
+async function init() {
 
-    // Cargar estado guardado
+    // Cargar estado inicial (local rápido)
     const state =
         loadState();
 
@@ -121,6 +133,37 @@ function init() {
             'click',
             exportCopy
         );
+
+    // Renderizar sección de usuario en el sidebar
+    await renderAuthSection();
+
+    // Configurar listener para login / logout
+    setOnAuthChanged(async (user) => {
+        if (user) {
+            const cloud = await syncStateWithCloud();
+            if (cloud) {
+                setState(cloud);
+                renderAll();
+            }
+        } else {
+            setState(defaultState());
+            renderAll();
+            openAuthModal();
+        }
+    });
+
+    // Verificar si ya hay usuario logueado en la nube
+    const user = await getCurrentUser();
+    if (user) {
+        const cloud = await syncStateWithCloud();
+        if (cloud) {
+            setState(cloud);
+            renderAll();
+        }
+    } else {
+        // Si no está logueado, abrimos el modal para que pueda identificarse
+        openAuthModal();
+    }
 }
 
 
