@@ -31,7 +31,7 @@ export function renderDashboard() {
 
     if (sl) {
         sl.innerHTML =
-            'org.sys ▸ semana ' +
+            'Cronogrami ▸ semana ' +
             weekNum +
             '/' +
             totalWeeks +
