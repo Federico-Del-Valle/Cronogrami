@@ -22,7 +22,7 @@ export const CATS = [
     {
         key: 'gimnasio',
         label: 'Gimnasio',
-        placeholder: 'Rutina de hoy…'
+        placeholder: ''
     },
     {
         key: 'libre',
