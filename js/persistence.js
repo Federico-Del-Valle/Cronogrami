@@ -12,6 +12,9 @@ export function loadLocalState() {
             if (!saved.keyDates) {
                 state.keyDates = defaultState().keyDates;
             }
+            if (!saved.impuestos) {
+                state.impuestos = defaultState().impuestos || [];
+            }
             return state;
         }
     } catch (e) {
@@ -34,6 +37,9 @@ export async function syncStateWithCloud() {
             const state = Object.assign(defaultState(), cloudData);
             if (!cloudData.keyDates) {
                 state.keyDates = defaultState().keyDates;
+            }
+            if (!cloudData.impuestos) {
+                state.impuestos = defaultState().impuestos || [];
             }
             try {
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(state));

@@ -24,6 +24,10 @@ import {
 } from './cronograma.js';
 
 import {
+    renderImpuestos
+} from './impuestos.js';
+
+import {
     exportCopy
 } from './export.js';
 
@@ -75,6 +79,8 @@ function renderAll() {
     renderDashboard();
 
     renderCronograma();
+
+    renderImpuestos();
 }
 
 

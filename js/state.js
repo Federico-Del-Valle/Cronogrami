@@ -162,6 +162,35 @@ export function defaultState() {
         ],
 
         cronograma,
+        impuestos: [
+            {
+                id: 'imp_1',
+                nombre: 'Monotributo',
+                mes: 8,
+                anio: 2026,
+                diaPago: 20,
+                monto: '12500',
+                notas: 'Pago mensual AFIP'
+            },
+            {
+                id: 'imp_2',
+                nombre: 'Ingresos Brutos',
+                mes: 8,
+                anio: 2026,
+                diaPago: 18,
+                monto: '8400',
+                notas: 'Régimen simplificado'
+            },
+            {
+                id: 'imp_3',
+                nombre: 'Monotributo',
+                mes: 9,
+                anio: 2026,
+                diaPago: 10,
+                monto: '12500',
+                notas: 'Pagado a tiempo'
+            }
+        ]
     };
 }
 

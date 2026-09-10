@@ -41,6 +41,21 @@ export const CATS = [
     },
 ];
 
+export const MONTHS = [
+    'Enero',
+    'Febrero',
+    'Marzo',
+    'Abril',
+    'Mayo',
+    'Junio',
+    'Julio',
+    'Agosto',
+    'Septiembre',
+    'Octubre',
+    'Noviembre',
+    'Diciembre'
+];
+
 export const PANELS = [
     {
         key: 'dashboard',
@@ -51,6 +66,11 @@ export const PANELS = [
         key: 'cronograma',
         tag: 'CR',
         label: 'Cronograma'
+    },
+    {
+        key: 'impuestos',
+        tag: 'IM',
+        label: 'Impuestos'
     }
 ];
 

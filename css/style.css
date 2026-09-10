@@ -117,15 +117,30 @@
   .legend-dot{ width:10px; height:10px; border-radius:3px; }
   .footnote{ font-size:11.5px; color:var(--ink-3); font-style:italic; margin-top:10px; line-height:1.5; }
 
+  .cronograma-desktop-view{ display:block; }
+  .cronograma-vertical-view{ display:none; }
+  .force-vertical-view .cronograma-vertical-view{ display:block !important; }
+  .force-vertical-view .cronograma-desktop-view{ display:none !important; }
+  .force-table-view .cronograma-desktop-view{ display:block !important; }
+  .force-table-view .cronograma-vertical-view{ display:none !important; }
+
   @media (max-width: 860px){
     .app{ flex-direction:column; }
     .sidebar{ position:relative; width:100%; flex:none; height:auto; }
-    .nav{ display:flex; overflow-x:auto; padding:8px 10px; gap:4px; }
-    .nav-item{ flex:0 0 auto; margin-bottom:0; white-space:nowrap; }
+    .brand{ padding:14px 16px 12px; }
+    .nav{ display:flex; overflow-x:auto; padding:6px 12px; gap:6px; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+    .nav::-webkit-scrollbar{ display:none; }
+    .nav-item{ flex:0 0 auto; margin-bottom:0; white-space:nowrap; padding:7px 12px; border-radius:18px; }
     .statusline{ display:none; }
-    .content{ padding:20px 16px 60px; }
-    .topbar{ padding:14px 16px; }
+    .sidebar-footer{ display:flex; align-items:center; justify-content:space-between; padding:8px 14px; gap:10px; border-top:1px solid var(--sidebar-line); flex-wrap:wrap; }
+    .sidebar-footer .auth-section{ margin-bottom:0; flex:1; min-width:140px; }
+    .sidebar-footer .btn-export{ width:auto; padding:7px 12px; font-size:11px; white-space:nowrap; }
+    .sidebar-footer .save-status{ margin-top:0; font-size:10px; white-space:nowrap; }
+    .content{ padding:18px 14px 60px; }
+    .topbar{ padding:12px 14px; }
     .grid-2{ grid-template-columns:1fr; }
+    .cronograma-desktop-view{ display:none; }
+    .cronograma-vertical-view{ display:block; }
   }
 
   .deadline-header {
@@ -806,4 +821,948 @@
 
 .auth-btn-guest:hover {
     color: var(--ink);
+}
+
+/* ==========================================================================
+   Cronograma Header & View Switcher
+   ========================================================================== */
+.cronograma-header-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.cron-lede {
+    margin-bottom: 0;
+    flex: 1;
+    min-width: 260px;
+}
+
+.cron-view-switcher {
+    display: inline-flex;
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    padding: 3px;
+    border-radius: 8px;
+    gap: 3px;
+    flex-shrink: 0;
+}
+
+.cron-switch-btn {
+    border: none;
+    background: transparent;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink-2);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.cron-switch-btn:hover {
+    color: var(--ink);
+}
+
+.cron-switch-btn.active {
+    background: var(--panel);
+    color: var(--ink);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+/* ==========================================================================
+   Cronograma Vertical View (Mobile & Responsive)
+   ========================================================================== */
+.cron-day-jump-nav {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding: 2px 2px 10px;
+    margin-bottom: 14px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.cron-day-jump-nav::-webkit-scrollbar {
+    display: none;
+}
+
+.cron-day-chip {
+    padding: 6px 13px;
+    border-radius: 20px;
+    border: 1px solid var(--line);
+    background: var(--panel);
+    color: var(--ink-2);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    flex: 0 0 auto;
+    transition: all 0.15s ease;
+}
+
+.cron-day-chip:hover {
+    border-color: var(--accent);
+    color: var(--ink);
+}
+
+.cron-day-chip.has-items {
+    border-color: var(--accent-line);
+    background: var(--accent-soft);
+    color: var(--accent-ink);
+    font-weight: 700;
+}
+
+.vday-card {
+    margin-bottom: 16px;
+    border-radius: 12px;
+    padding: 16px 18px;
+    transition: all 0.2s ease;
+}
+
+.vday-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--line-2);
+}
+
+.vday-title-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.vday-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+}
+
+.vday-badge-hours {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: var(--panel-2);
+    color: var(--ink-2);
+    border: 1px solid var(--line);
+}
+
+.btn-add-activity {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--accent-soft);
+    color: var(--accent-ink);
+    border: 1px solid var(--accent-line);
+    border-radius: 7px;
+    padding: 6px 11px;
+    font-size: 11.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.btn-add-activity:hover {
+    filter: brightness(0.96);
+}
+
+.btn-plus-icon {
+    font-size: 13px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.vday-activities-list {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.vday-empty-state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 14px 12px;
+    border: 1px dashed var(--line);
+    border-radius: 8px;
+    color: var(--ink-3);
+    font-size: 12.5px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    background: var(--panel-2);
+}
+
+.vday-empty-state:hover {
+    border-color: var(--accent);
+    color: var(--accent-ink);
+    background: var(--accent-soft);
+}
+
+.vactivity-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 11px 13px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: var(--panel);
+    transition: all 0.15s ease;
+}
+
+.vactivity-card:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.vactivity-time-col {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 105px;
+}
+
+.vactivity-time-range {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ink);
+    white-space: nowrap;
+}
+
+.vactivity-duration {
+    font-size: 11px;
+    color: var(--ink-2);
+    margin-top: 2px;
+}
+
+.vactivity-center-col {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+    min-width: 0;
+}
+
+.vactivity-cat-tag {
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    opacity: 0.85;
+}
+
+.vactivity-title {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--ink);
+    word-break: break-word;
+    line-height: 1.35;
+}
+
+.vactivity-gym-row {
+    margin-top: 3px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.vactivity-btn-add-routine {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px dashed var(--cat-gimnasio-line);
+    color: var(--cat-gimnasio-ink);
+    border-radius: 5px;
+    padding: 3px 8px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.vactivity-btn-add-routine:hover {
+    background: var(--cat-gimnasio-ink);
+    color: #ffffff;
+    border-style: solid;
+}
+
+.vactivity-actions-col {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-shrink: 0;
+}
+
+.vactivity-btn-action {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    background: rgba(255, 255, 255, 0.75);
+    color: var(--ink-2);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.vactivity-btn-action:hover {
+    background: #ffffff;
+    color: var(--ink);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+}
+
+.vactivity-btn-delete:hover {
+    background: #DC2626;
+    color: #ffffff;
+    border-color: #DC2626;
+}
+
+.vday-toggle-breakdown-btn {
+    width: 100%;
+    border: none;
+    background: transparent;
+    color: var(--ink-3);
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 10px 4px 2px;
+    text-align: center;
+    cursor: pointer;
+    margin-top: 6px;
+    transition: color 0.15s;
+}
+
+.vday-toggle-breakdown-btn:hover {
+    color: var(--ink);
+}
+
+.vday-breakdown-container {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--line);
+}
+
+.vday-hour-row {
+    display: flex;
+    align-items: stretch;
+    gap: 8px;
+}
+
+.vday-hour-label {
+    flex: 0 0 52px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--panel-2);
+    border-radius: 6px;
+    border: 1px solid var(--line-2);
+}
+
+.vday-hour-cell-wrap {
+    flex: 1;
+    min-width: 0;
+}
+
+.vday-hour-cell-wrap td.hcell {
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    display: block;
+    height: auto;
+    min-height: 36px;
+}
+
+/* ==========================================================================
+   Impuestos Section Styles
+   ========================================================================== */
+.impuestos-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+    padding: 14px 18px;
+}
+
+.year-nav {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 3px 6px;
+}
+
+.year-nav-btn {
+    border: none;
+    background: transparent;
+    color: var(--ink-2);
+    font-size: 12px;
+    padding: 5px 9px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.year-nav-btn:hover {
+    background: var(--line);
+    color: var(--ink);
+}
+
+.year-display {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--ink);
+    padding: 0 6px;
+    min-width: 46px;
+    text-align: center;
+}
+
+.impuestos-stats {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.impuestos-stat-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    padding: 5px 10px;
+    font-size: 12px;
+    color: var(--ink-2);
+}
+
+.stat-chip-value {
+    font-family: var(--font-mono);
+    color: var(--ink);
+}
+
+.stat-chip-value.stat-monto {
+    color: #2E6B3E;
+    font-weight: 700;
+}
+
+.btn-add-impuesto-main {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    border: none;
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-weight: 700;
+    font-size: 12.5px;
+    cursor: pointer;
+    transition: filter 0.15s;
+}
+
+.btn-add-impuesto-main:hover {
+    filter: brightness(1.07);
+}
+
+.month-jump-nav {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding: 2px 2px 10px;
+    margin-bottom: 16px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.month-jump-nav::-webkit-scrollbar {
+    display: none;
+}
+
+.month-jump-chip {
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--line);
+    background: var(--panel);
+    color: var(--ink-2);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    flex: 0 0 auto;
+    transition: all 0.15s ease;
+}
+
+.month-jump-chip:hover {
+    border-color: var(--accent);
+    color: var(--ink);
+}
+
+.month-jump-chip.current {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    color: var(--accent-ink);
+    font-weight: 700;
+}
+
+.month-jump-chip.has-items {
+    border-bottom: 2px solid var(--accent);
+}
+
+.impuestos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+}
+
+.month-card {
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.2s ease;
+    margin-bottom: 0;
+}
+
+.current-month-card {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent), 0 4px 14px rgba(31, 191, 149, 0.12);
+}
+
+.month-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    border-bottom: 1px solid var(--line-2);
+    padding-bottom: 10px;
+    margin-bottom: 12px;
+}
+
+.month-card-title {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    flex-wrap: wrap;
+}
+
+.month-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink);
+}
+
+.current-month-badge {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 700;
+    background: var(--accent-soft);
+    color: var(--accent-ink);
+    border: 1px solid var(--accent-line);
+    border-radius: 4px;
+    padding: 1px 6px;
+}
+
+.month-count-badge {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--ink-3);
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 1px 6px;
+}
+
+.month-add-btn {
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    border: 1px dashed var(--line);
+    background: var(--panel-2);
+    color: var(--ink-2);
+    font-size: 15px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.month-add-btn:hover {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    color: var(--accent-ink);
+}
+
+.month-taxes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+}
+
+.month-empty-state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 12px;
+    border: 1px dashed var(--line);
+    border-radius: 8px;
+    color: var(--ink-3);
+    font-size: 12px;
+    cursor: pointer;
+    text-align: center;
+    background: var(--panel-2);
+    transition: all 0.15s ease;
+}
+
+.month-empty-state:hover {
+    border-color: var(--accent);
+    color: var(--accent-ink);
+    background: var(--accent-soft);
+}
+
+.tax-item-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 9px 11px;
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    transition: border-color 0.15s;
+}
+
+.tax-item-row:hover {
+    border-color: var(--ink-3);
+}
+
+.tax-main-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+    min-width: 0;
+}
+
+.tax-name-line {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.tax-check-icon {
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    background: #DFF1E2;
+    color: #2E6B3E;
+    font-size: 10px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.tax-name {
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--ink);
+    word-break: break-word;
+}
+
+.tax-meta-line {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-left: 24px;
+}
+
+.tax-badge-day {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 600;
+    color: #2B517E;
+    background: #DEEBFA;
+    border: 1px solid #8FB8E8;
+    padding: 1px 6px;
+    border-radius: 4px;
+}
+
+.tax-badge-monto {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 700;
+    color: #8A6A16;
+    background: #FCF0CE;
+    border: 1px solid #DDB646;
+    padding: 1px 6px;
+    border-radius: 4px;
+}
+
+.tax-note {
+    font-size: 11px;
+    color: var(--ink-3);
+    font-style: italic;
+    max-width: 140px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tax-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.tax-btn-edit,
+.tax-btn-delete {
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    border: 1px solid var(--line);
+    background: var(--panel);
+    color: var(--ink-2);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 11px;
+    transition: all 0.15s ease;
+}
+
+.tax-btn-edit:hover {
+    background: var(--line-2);
+    color: var(--ink);
+}
+
+.tax-btn-delete:hover {
+    background: #DC2626;
+    color: #ffffff;
+    border-color: #DC2626;
+}
+
+/* ==========================================================================
+   Activity and Impuesto Modal Form Controls
+   ========================================================================== */
+.modal-fields-row {
+    display: flex;
+    gap: 12px;
+}
+
+.flex-1 {
+    flex: 1;
+}
+
+.activity-cat-selector {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(115px, 1fr));
+    gap: 6px;
+}
+
+.activity-cat-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 6px 9px;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--ink-2);
+    background: var(--panel);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.activity-cat-pill:hover {
+    filter: brightness(0.96);
+}
+
+.activity-cat-pill.active {
+    border-color: var(--ink);
+    box-shadow: 0 0 0 2px var(--ink);
+    font-weight: 700;
+}
+
+.cat-pill-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    background: currentColor;
+}
+
+.input-error {
+    border-color: #DC2626 !important;
+    box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.25) !important;
+}
+
+@keyframes flashHighlight {
+    0% { background: var(--accent-soft); }
+    100% { background: var(--panel); }
+}
+
+.highlight-flash {
+    animation: flashHighlight 1.2s ease;
+}
+
+/* ==========================================================================
+   Responsive Adaptations for Samsung Galaxy S24 & Small Mobile Screens
+   ========================================================================== */
+@media (max-width: 600px) {
+    .impuestos-topbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .btn-add-impuesto-main {
+        justify-content: center;
+    }
+
+    .impuestos-stats {
+        justify-content: space-between;
+    }
+
+    .cronograma-header-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .cron-view-switcher {
+        width: 100%;
+        justify-content: stretch;
+    }
+
+    .cron-switch-btn {
+        flex: 1;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Samsung Galaxy S24 & Mobile Layout (~360px - 412px) */
+    .content {
+        padding: 14px 10px 60px;
+    }
+
+    .topbar {
+        padding: 10px 12px;
+    }
+
+    .topbar-title {
+        font-size: 18px;
+    }
+
+    .topbar-date {
+        font-size: 10.5px;
+    }
+
+    .card {
+        padding: 14px 12px;
+        margin-bottom: 14px;
+    }
+
+    .vactivity-card {
+        flex-direction: row;
+        align-items: flex-start;
+        padding: 9px 10px;
+        gap: 8px;
+    }
+
+    .vactivity-time-col {
+        flex: 0 0 80px;
+    }
+
+    .vactivity-time-range {
+        font-size: 11px;
+    }
+
+    .vactivity-duration {
+        font-size: 9.5px;
+    }
+
+    .vactivity-title {
+        font-size: 12.5px;
+    }
+
+    .vactivity-cat-tag {
+        font-size: 9px;
+    }
+
+    .impuestos-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .month-card {
+        padding: 12px;
+    }
+
+    .modal-fields-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .modal-card {
+        width: 100%;
+        max-width: 95vw;
+        margin: 8px;
+    }
+
+    .modal-body {
+        padding: 14px 12px;
+        gap: 12px;
+    }
+
+    .modal-footer {
+        padding: 10px 12px;
+    }
+
+    .deadline-row {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .deadline-row input[type=date] {
+        flex: 1 1 120px;
+    }
+
+    .deadline-row input[type=text] {
+        flex: 2 1 140px;
+        min-width: 0;
+    }
+
+    .tax-meta-line {
+        margin-left: 0;
+        margin-top: 2px;
+    }
 }
