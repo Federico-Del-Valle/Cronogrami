@@ -44,6 +44,17 @@ export function renderDashboard() {
     const grid =
         el('div', { class: 'grid-2' });
 
+    // Aseguramos que deadlines esté ordenado cronológicamente y tenga IDs
+    if (!STATE.deadlines) {
+        STATE.deadlines = [];
+    }
+    STATE.deadlines.forEach((d, idx) => {
+        if (!d.id) {
+            d.id = 'dl_' + idx + '_' + Math.random().toString(36).substr(2, 5);
+        }
+    });
+    sortDeadlines();
+
     // Deadlines
     const ddCard = el('div', {
         class: 'card'
@@ -78,11 +89,29 @@ export function renderDashboard() {
 
     ddCard.appendChild(ddHeader);
 
-    STATE.deadlines.forEach((d, index) => {
+    STATE.deadlines.forEach((d) => {
 
         const row = el('div', {
-            class: 'deadline-row'
+            class: 'deadline-row',
+            'data-deadline-id': d.id
         });
+
+        const handleDateChange = (newVal) => {
+            if (d.fecha === newVal) return;
+            d.fecha = newVal;
+            sortDeadlines();
+            markDirtySoon();
+            renderDashboard();
+
+            // Foco en el input de texto del mismo deadline para escribir fluido
+            setTimeout(() => {
+                const targetRow = document.querySelector(`[data-deadline-id="${d.id}"]`);
+                if (targetRow) {
+                    const txt = targetRow.querySelector('input[type="text"]');
+                    if (txt) txt.focus();
+                }
+            }, 50);
+        };
 
         row.appendChild(
             el(
@@ -90,10 +119,8 @@ export function renderDashboard() {
                 {
                     type: 'date',
                     value: d.fecha,
-                    onchange: (e) => {
-                        d.fecha = e.target.value;
-                        markDirtySoon();
-                    }
+                    onchange: (e) => handleDateChange(e.target.value),
+                    onblur: (e) => handleDateChange(e.target.value)
                 }
             )
         );
@@ -104,9 +131,16 @@ export function renderDashboard() {
                 {
                     type: 'text',
                     value: d.label,
+                    placeholder: 'Descripción del deadline...',
                     oninput: (e) => {
                         d.label = e.target.value;
                         markDirtySoon();
+                    },
+                    onkeydown: (e) => {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                            addDeadline();
+                        }
                     }
                 }
             )
@@ -117,13 +151,10 @@ export function renderDashboard() {
                 'button',
                 {
                     class: 'btn-delete-deadline',
-                    title: 'Eliminar',
+                    title: 'Eliminar deadline',
                     onclick: () => {
-
-                        STATE.deadlines.splice(index, 1);
-
+                        STATE.deadlines = STATE.deadlines.filter(item => item.id !== d.id);
                         markDirtySoon();
-
                         renderDashboard();
                     }
                 },
@@ -208,14 +239,44 @@ export function renderDashboard() {
     );
 }
 
-function addDeadline() {
+export function sortDeadlines() {
+    if (!STATE || !STATE.deadlines) return;
+    STATE.deadlines.sort((a, b) => {
+        const fechaA = (a.fecha || '').trim();
+        const fechaB = (b.fecha || '').trim();
 
-    STATE.deadlines.push({
+        if (!fechaA && !fechaB) return 0;
+        if (!fechaA) return 1;
+        if (!fechaB) return -1;
+
+        const cmp = fechaA.localeCompare(fechaB);
+        if (cmp !== 0) return cmp;
+        return (a.label || '').localeCompare(b.label || '');
+    });
+}
+
+function addDeadline() {
+    const newDl = {
+        id: 'dl_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
         fecha: '',
         label: ''
-    });
+    };
 
+    STATE.deadlines.push(newDl);
+    sortDeadlines();
     markDirtySoon();
-
     renderDashboard();
+
+    setTimeout(() => {
+        const rowEl = document.querySelector(`[data-deadline-id="${newDl.id}"]`);
+        if (rowEl) {
+            const dateInput = rowEl.querySelector('input[type="date"]');
+            if (dateInput) {
+                dateInput.focus();
+                if (typeof dateInput.showPicker === 'function') {
+                    try { dateInput.showPicker(); } catch (_) {}
+                }
+            }
+        }
+    }, 50);
 }
